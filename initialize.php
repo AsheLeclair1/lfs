@@ -14,3 +14,48 @@ if(!defined('DB_USERNAME')) define('DB_USERNAME',"root");
 if(!defined('DB_PASSWORD')) define('DB_PASSWORD',"");
 if(!defined('DB_NAME')) define('DB_NAME',"lfis_db");
 ?>
+// Подключение к базе данных
+$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Запуск сессии
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Класс SystemSettings
+class SystemSettings {
+    private $conn;
+    public function __construct($conn) {
+        $this->conn = $conn;
+    }
+    public function userdata($key) {
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+    }
+    public function set_userdata($key, $value) {
+        $_SESSION[$key] = $value;
+    }
+    public function info($key) {
+        $qry = $this->conn->query("SELECT * FROM system_info WHERE meta_field = '$key'");
+        if($qry && $qry->num_rows > 0){
+            $row = $qry->fetch_assoc();
+            return $row['meta_value'];
+        }
+        return null;
+    }
+    public function set_flashdata($key, $value) {
+        $_SESSION[$key] = $value;
+    }
+    public function chk_flashdata($key) {
+        return isset($_SESSION[$key]);
+    }
+    public function flashdata($key) {
+        $val = $_SESSION[$key];
+        unset($_SESSION[$key]);
+        return $val;
+    }
+}
+
+$_settings = new SystemSettings($conn);
