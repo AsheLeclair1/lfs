@@ -139,6 +139,9 @@ class Master extends DBConnection {
     }
     
     function save_item(){
+         file_put_contents('/opt/lampp/htdocs/Lost-And-Found-main/debug.log', "=== " . date('Y-m-d H:i:s') . " ===\n", FILE_APPEND);
+    file_put_contents('/opt/lampp/htdocs/Lost-And-Found-main/debug.log', "POST: " . print_r($_POST, true) . "\n", FILE_APPEND);
+    file_put_contents('/opt/lampp/htdocs/Lost-And-Found-main/debug.log', "userdata id: " . $_settings->userdata('id') . "\n", FILE_APPEND);
         extract($_POST);
         $data = "";
         
