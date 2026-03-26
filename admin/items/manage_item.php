@@ -16,7 +16,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <div class="container-fluid">
             <form action="" id="items-form">
                 <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
-                
+                <input type="hidden" name="created_by" value="<?php echo $_settings->userdata('id'); ?>">
                 <div class="form-group mb-3">
                     <label for="category_id" class="control-label">Категория</label>
                     <select name="category_id" id="category_id" class="form-select" required>
